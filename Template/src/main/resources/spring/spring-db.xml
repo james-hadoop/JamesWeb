@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+         http://www.springframework.org/schema/tx  
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+    default-lazy-init="false">
+
+    <description>Spring db config</description>
+
+    <!-- db 公共配置 -->
+    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" lazy-init="true">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="${mysql.jdbc.driver}" />
+        <!-- Connection Pooling Info -->
+        <!-- 连接池中最多可空闲maxIdle个连接 -->
+        <property name="maxIdle" value="${dbcp.maxIdle}" />
+        <property name="minIdle" value="${dbcp.minIdle}" />
+        <property name="initialSize" value="${dbcp.initialSize}" />
+        <!-- 连接池支持的最大连接数 -->
+        <property name="maxActive" value="${dbcp.maxActive}" />
+        <!-- 连接池中连接用完时,新的请求等待时间,毫秒 -->
+        <property name="maxWait" value="${dbcp.maxWait}" />
+        <property name="defaultAutoCommit" value="false" />
+        <!-- 是否自动回收超时连接 -->
+        <property name="removeAbandoned" value="true" />
+        <!-- 超时时间(以秒数为单位) -->
+        <property name="removeAbandonedTimeout" value="${dbcp.removeAbandonedTimeout}" />
+        <!-- ，将会在回收事件后，在log中打印出回收Connection的错误信息，包括在哪个地方用了Connection却忘记关闭了，在调试的时候很有用 -->
+        <property name="logAbandoned" value="true" />
+        <!-- 那么在getNumActive()快要到getMaxActive()的时候，系统会进行无效的 Connection的回收，回收的Connection为removeAbandonedTimeout(默认300秒)中设置的秒数后没有使用的 Connection -->
+        <property name="poolPreparedStatements" value="true" />
+
+        <!-- 每timeBetweenEvictionRunsMillis毫秒检查一次连接池中空闲的连接,把空闲时间超过minEvictableIdleTimeMillis毫秒的连接断开,直到连接池中的连接数到minIdle为止 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${dbcp.timeBetweenEvictionRunsMillis}" />
+        <!-- 连接池中连接可空闲的时间(毫秒)，一定要小于mysql的wait_timeout的值 -->
+        <property name="minEvictableIdleTimeMillis" value="${dbcp.minEvictableIdleTimeMillis}" />
+
+        <!-- 取得连接时验证其有效性 -->
+        <property name="testOnBorrow" value="false" />
+        <!-- 返回连接时验证其有效性 -->
+        <property name="testOnReturn" value="false" />
+        <!-- 指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除 -->
+        <property name="testWhileIdle" value="true" />
+        <!-- 验证sql -->
+        <property name="validationQuery" value="select 1" />
+    </bean>
+
+    <!-- mysql -->
+    <bean id="mysqlDataSource" parent="basicDataSource">
+        <property name="url" value="${mysql.data.jdbc.url}" />
+        <property name="username" value="${mysql.data.jdbc.username}" />
+        <property name="password" value="${mysql.data.jdbc.password}" />
+    </bean>
+
+    <bean id="mysqlSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="mysqlDataSource" />
+        <property name="configLocation" value="classpath:/mybatis/mysql/Configuration.xml" />
+        <!--<property name="mapperLocations" value="classpath:/mybatis/mysql/*Mapper.xml" />-->
+    </bean>
+
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="addToConfig" value="true" />
+        <property name="basePackage" value="james.web.template" />
+        <property name="annotationClass" value="james.web.template.annotation.MybatisMapper" />
+        <property name="sqlSessionFactoryBeanName" value="mysqlSqlSessionFactory" />
+    </bean>
+
+    <!-- 事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="mysqlDataSource" />
+    </bean>
+</beans>

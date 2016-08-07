@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="james.web.template.dao.mapper.DataTableMapper" >
+  <resultMap id="BaseResultMap" type="james.web.template.entity.DataTable" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="int" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="file_name_prefix" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="en_able" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="hdfs_data_dir" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, file_name_prefix, en_able, hdfs_data_dir
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="int" >
+    select 
+    <include refid="Base_Column_List" />
+    from data_table
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="int" >
+    delete from data_table
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="james.web.template.entity.DataTable" >
+    insert into data_table (id, name, file_name_prefix, 
+      en_able, hdfs_data_dir)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{fileNamePrefix,jdbcType=VARCHAR}, 
+      #{enAble,jdbcType=INTEGER}, #{hdfsDataDir,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="james.web.template.entity.DataTable" >
+    insert into data_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="fileNamePrefix != null" >
+        file_name_prefix,
+      </if>
+      <if test="enAble != null" >
+        en_able,
+      </if>
+      <if test="hdfsDataDir != null" >
+        hdfs_data_dir,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNamePrefix != null" >
+        #{fileNamePrefix,jdbcType=VARCHAR},
+      </if>
+      <if test="enAble != null" >
+        #{enAble,jdbcType=INTEGER},
+      </if>
+      <if test="hdfsDataDir != null" >
+        #{hdfsDataDir,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="james.web.template.entity.DataTable" >
+    update data_table
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNamePrefix != null" >
+        file_name_prefix = #{fileNamePrefix,jdbcType=VARCHAR},
+      </if>
+      <if test="enAble != null" >
+        en_able = #{enAble,jdbcType=INTEGER},
+      </if>
+      <if test="hdfsDataDir != null" >
+        hdfs_data_dir = #{hdfsDataDir,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="james.web.template.entity.DataTable" >
+    update data_table
+    set name = #{name,jdbcType=VARCHAR},
+      file_name_prefix = #{fileNamePrefix,jdbcType=VARCHAR},
+      en_able = #{enAble,jdbcType=INTEGER},
+      hdfs_data_dir = #{hdfsDataDir,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
