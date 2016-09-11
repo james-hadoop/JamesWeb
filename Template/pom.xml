@@ -9,8 +9,8 @@
  <url>http://maven.apache.org</url>
  <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  <spring.version>4.0.3.RELEASE</spring.version>
-  <struts.version>2.3.24</struts.version>
+  <spring.version>4.2.6.RELEASE</spring.version>
+  <spring.data.version>1.7.2.RELEASE</spring.data.version>
   <commons.lang3.version>3.3.2</commons.lang3.version>
   <jackson.version>2.4.1</jackson.version>
   <junit.version>4.11</junit.version>
@@ -21,6 +21,7 @@
   <mybatis.spring.version>1.2.3</mybatis.spring.version>
   <mybatis.version>3.3.0</mybatis.version>
   <mysql.connector.version>5.1.30</mysql.connector.version>
+  <jedis.version>2.8.1</jedis.version>
   <commons.dbcp.version>1.4</commons.dbcp.version>
   <commons.lang3.version>3.4</commons.lang3.version>
   <fastjson.version>1.2.7</fastjson.version>
@@ -86,7 +87,11 @@
    <artifactId>spring-webmvc</artifactId>
    <version>${spring.version}</version>
   </dependency>
-
+  <dependency>
+   <groupId>org.springframework.data</groupId>
+   <artifactId>spring-data-redis</artifactId>
+   <version>${spring.data.version}</version>
+  </dependency>
   <dependency>
    <groupId>org.apache.httpcomponents</groupId>
    <artifactId>httpclient</artifactId>
@@ -136,7 +141,7 @@
    <artifactId>commons-io</artifactId>
    <version>${commons-io.version}</version>
   </dependency>
-  <!-- 接收上传文件 -->
+  <!-- file upload -->
   <dependency>
    <groupId>commons-fileupload</groupId>
    <artifactId>commons-fileupload</artifactId>
@@ -228,11 +233,8 @@
   <dependency>
    <groupId>redis.clients</groupId>
    <artifactId>jedis</artifactId>
-   <version>2.8.1</version>
-   <type>jar</type>
-   <scope>compile</scope>
+   <version>${jedis.version}</version>
   </dependency>
-
  </dependencies>
  <build>
   <finalName>Template</finalName>
@@ -242,8 +244,6 @@
     <artifactId>maven-assembly-plugin</artifactId>
     <version>2.4</version>
     <configuration>
-     <!-- 应用名（最后压缩包的名字） -->
-
      <appendAssemblyId>false</appendAssemblyId>
      <descriptors>
       <descriptor>assembly.xml</descriptor>
@@ -254,11 +254,11 @@
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-compiler-plugin</artifactId>
     <version>2.5.1</version>
-    <!-- Maven默认的编译级别是1.5 , 目前此项目中使用了1.7才有的语法, 固需要做以下配置 -->
     <configuration>
      <source>1.8</source>
      <target>1.8</target>
      <encoding>UTF-8</encoding>
+     <failOnMissingWebXml>false</failOnMissingWebXml>
     </configuration>
    </plugin>
    <plugin>

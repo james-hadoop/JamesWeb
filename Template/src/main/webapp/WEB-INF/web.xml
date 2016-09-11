@@ -2,8 +2,8 @@
         "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app>
- <display-name>James Web Template</display-name>
+<web-app id="WebApp_ID">
+ <display-name>Template</display-name>
 
  <context-param>
   <param-name>log4jConfigLocation</param-name>
@@ -32,9 +32,15 @@
   <url-pattern>/*</url-pattern>
  </filter-mapping>
 
- <!-- <listener> <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class> </listener> <listener> 
-  <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class> </listener> <listener> <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class> 
-  </listener> -->
+ <listener>
+  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+ </listener>
 
  <servlet>
   <servlet-name>springServlet</servlet-name>
@@ -48,6 +54,14 @@
 
  <servlet-mapping>
   <servlet-name>springServlet</servlet-name>
-  <url-pattern>/</url-pattern>
+  <url-pattern>/*</url-pattern>
  </servlet-mapping>
+ <welcome-file-list>
+  <welcome-file>index.html</welcome-file>
+  <welcome-file>index.htm</welcome-file>
+  <welcome-file>index.jsp</welcome-file>
+  <welcome-file>default.html</welcome-file>
+  <welcome-file>default.htm</welcome-file>
+  <welcome-file>default.jsp</welcome-file>
+ </welcome-file-list>
 </web-app>
